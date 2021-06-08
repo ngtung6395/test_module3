@@ -87,7 +87,7 @@ public class ProductServelet extends HttpServlet {
         Category category = categoryService.findById(category_id);
         Product product = new Product(name,price,color,quantity,description,category);
         productService.edit(id,product);
-        showAllProduct(req,resp);
+        resp.sendRedirect("/Products");
     }
 
     private void createProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -100,7 +100,7 @@ public class ProductServelet extends HttpServlet {
         Category category = categoryService.findById(category_id);
         Product product = new Product(name,price,color,quantity,description,category);
         productService.save(product);
-        showAllProduct(req,resp);
+        resp.sendRedirect("/Products");
     }
 
 }
