@@ -33,6 +33,9 @@ public class ProductServelet extends HttpServlet {
             case "edit":
                 showFormEdit(req,resp);
                 break;
+            case "delete":
+                delteProduct(req,resp);
+                break;
             default:
                 showAllProduct(req,resp);
                 break;
@@ -42,19 +45,23 @@ public class ProductServelet extends HttpServlet {
     private void showFormEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
         Product product = productService.findById(id);
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/product/edit.jsp");
+        List<Category> categories = categoryService.findAll();
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/products/edit.jsp");
+        req.setAttribute("categories",categories);
         req.setAttribute("product",product);
         dispatcher.forward(req,resp);
     }
 
     private void showFormCreate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/product/create.jsp");
+        List<Category> categories = categoryService.findAll();
+        req.setAttribute("categories",categories);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/products/create.jsp");
         dispatcher.forward(req,resp);
     }
 
     private void showAllProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Product> productList = productService.findAll();
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/product/list.jsp");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/products/list.jsp");
         req.setAttribute("productList",productList);
         dispatcher.forward(req,resp);
     }
@@ -72,8 +79,14 @@ public class ProductServelet extends HttpServlet {
             case "edit":
                 Edit(req,resp);
                 break;
-            
+
         }
+    }
+
+    private void delteProduct(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        productService.delete(id);
+        resp.sendRedirect("/Products");
     }
 
     private void Edit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -84,7 +97,7 @@ public class ProductServelet extends HttpServlet {
         String color = req.getParameter("color");
         String description = req.getParameter("description");
         int category_id = Integer.parseInt(req.getParameter("category_id"));
-        Category category = categoryService.findById(category_id);
+        Category category = new Category(category_id);
         Product product = new Product(name,price,color,quantity,description,category);
         productService.edit(id,product);
         resp.sendRedirect("/Products");
@@ -97,7 +110,7 @@ public class ProductServelet extends HttpServlet {
         String color = req.getParameter("color");
         String description = req.getParameter("description");
         int category_id = Integer.parseInt(req.getParameter("category_id"));
-        Category category = categoryService.findById(category_id);
+        Category category = new Category(category_id);
         Product product = new Product(name,price,color,quantity,description,category);
         productService.save(product);
         resp.sendRedirect("/Products");

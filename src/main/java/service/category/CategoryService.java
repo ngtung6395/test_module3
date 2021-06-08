@@ -7,14 +7,29 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryService implements ICategoryService {
     public static final String SELECT_CATEGORY_WHERE_ID = "select *from category where id = ?;";
+    public static final String SELECT_FROM_CATEGORY = "select *from category;";
     Connection connection = ConnectionJDBC.getConnection();
     @Override
     public List findAll() {
-        return null;
+        List<Category> categories = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SELECT_FROM_CATEGORY);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()){
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                Category category = new Category(id,name);
+                categories.add(category);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return categories;
     }
 
     @Override

@@ -12,32 +12,42 @@
     <title>Title</title>
 </head>
 <body>
-<table>
-    <caption><h2>List Product</h2></caption>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Color</th>
-        <th>Quantity</th>
-        <th>Description</th>
-        <th>Category</th>
-    </tr>
-    <c:forEach items ="${productList}" var="list">
+
+<div align="center">
+    <table border="1px">
+        <caption><h2>List Product</h2></caption>
         <tr>
-            <td>${list.id}</td>
-            <td>${list.name}</td>
-            <td>${list.price}</td>
-            <td>${list.color}</td>
-            <td>${list.quantity}</td>
-            <td>${list.description}</td>
-            <td>${list.category.name}</td>
-            <td>
-                <a href="/Products?action=edit&id=${list.id}">Edit</a>
-                <a href="/Products?action=delete&id=${list.id}">Delete</a>
-            </td>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Color</th>
+            <th>Quantity</th>
+            <th>Description</th>
+            <th>Category</th>
         </tr>
-    </c:forEach>
-</table>
+        <c:forEach items ="${productList}" var="list">
+            <tr>
+                <td>${list.id}</td>
+                <td>${list.name}</td>
+                <td>${list.price}</td>
+                <td>${list.color}</td>
+                <td>${list.quantity}</td>
+                <td>${list.description}</td>
+                <td>${list.category.name}</td>
+                <td>
+                    <a href="/Products?action=edit&id=${list.id}">Edit</a>
+                    <a href="/Products?action=delete&id=${list.id}">Delete</a>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
+</div>
+<div>
+    <center>
+        <h2>
+            <button><a href="/Products?action=create">Add New Product</a></button>
+        </h2>
+    </center>
+</div>
 </body>
 </html>
