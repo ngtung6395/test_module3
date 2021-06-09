@@ -20,6 +20,7 @@ public class ProductService implements IProductService{
             "VALUES (?,?,?,?,?,?);";
     public static final String DELETE_PRODUCT_BY_ID = "delete from product where id = ?;";
     public static final String EDIT_PRODUCT = "update product set name = ?, price = ?, quantity = ?, color = ?, description = ?, category_id = ? where id = ?;";
+    public static final String SEARCH_PRODUCT_BY_NAME = "select * from product where name like ?;";
     Connection connection = ConnectionJDBC.getConnection();
     ICategoryService categoryService = new CategoryService();
     @Override
@@ -116,5 +117,30 @@ public class ProductService implements IProductService{
             throwables.printStackTrace();
         }
 
+    }
+
+    @Override
+    public List<Product> searchByName(String name){
+        List<Product> productList = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(SEARCH_PRODUCT_BY_NAME);
+            statement.setString(1,"%"+name+"%");
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()){
+                int id = rs.getInt("id");
+                String product_name = rs.getString("name");
+                double price = rs.getDouble("price");
+                int quantity = rs.getInt("quantity");
+                String color = rs.getString("color");
+                String decription = rs.getString("description");
+                int category_id = rs.getInt("category_id");
+                Category category = categoryService.findById(category_id);
+                Product product = new Product(id,product_name,price,color,quantity,decription,category);
+                productList.add(product);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return productList;
     }
 }

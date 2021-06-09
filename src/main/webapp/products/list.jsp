@@ -12,6 +12,14 @@
     <title>Title</title>
 </head>
 <body>
+<div align="center">
+    <form action="/Products?action=search" method="post">
+        <input type="text" name="name"/>
+        <button type="submit">
+           search
+        </button>
+    </form>
+</div>
 
 <div align="center">
     <table border="1px">
@@ -35,19 +43,18 @@
                 <td>${list.description}</td>
                 <td>${list.category.name}</td>
                 <td>
-                    <a href="/Products?action=edit&id=${list.id}">Edit</a>
-                    <a href="/Products?action=delete&id=${list.id}">Delete</a>
+                    <button type="submit"><a href="/Products?action=edit&id=${list.id}">Edit</a></button>
+                    <button type="submit"><a href="/Products?action=delete&id=${list.id}">Delete</a></button>
                 </td>
             </tr>
         </c:forEach>
     </table>
 </div>
-<div>
-    <center>
+<div align="center">
+
         <h2>
             <button><a href="/Products?action=create">Add New Product</a></button>
         </h2>
-    </center>
 </div>
 </body>
 </html>

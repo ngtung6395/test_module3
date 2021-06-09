@@ -16,8 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import static jdk.nashorn.internal.objects.NativeString.search;
+
 @WebServlet(name = "ProductServlet", value = "/Products")
-public class ProductServelet extends HttpServlet {
+public class ProductServlet extends HttpServlet {
     IProductService productService = new ProductService();
     ICategoryService categoryService = new CategoryService();
     @Override
@@ -36,10 +38,20 @@ public class ProductServelet extends HttpServlet {
             case "delete":
                 delteProduct(req,resp);
                 break;
+
             default:
                 showAllProduct(req,resp);
                 break;
         }
+    }
+
+    private void search(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String name = req.getParameter("name");
+        List<Product> productList = productService.searchByName(name);
+        req.setAttribute("productList",productList);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/products/search.jsp");
+        dispatcher.forward(req,resp);
+
     }
 
     private void showFormEdit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -75,6 +87,9 @@ public class ProductServelet extends HttpServlet {
         switch (action){
             case "create":
                 createProduct(req,resp);
+                break;
+            case "search":
+                search(req,resp);
                 break;
             case "edit":
                 Edit(req,resp);
